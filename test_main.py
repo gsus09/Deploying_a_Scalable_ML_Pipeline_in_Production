@@ -37,7 +37,7 @@ def test_predict_income_smaler50K():
     data = response.json()
     assert isinstance(data, dict)
     assert "Income prediction is:" in data
-    assert data["Income prediction is:"] in ["<=50K"]
+    assert data["Income prediction is:"] == "<=50K"
 
 
 def test_predict_income_invalid_age():
@@ -123,4 +123,4 @@ def test_predict_income_greater50k():
     response = client.post("/predict_income", json=payload)
     assert response.status_code == 200
     print(response.json())
-    assert response.json()["Income prediction is:"] in [">50K"]
+    assert response.json() == {"Income prediction is:": ">50K"}
