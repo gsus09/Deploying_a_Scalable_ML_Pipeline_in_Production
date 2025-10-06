@@ -1,4 +1,24 @@
+"""Helping functions for train and save a machine learning model.
+Authors: Martin Thomas
+Date: 2024-06-10
+"""
+
+import joblib
+import os
 from sklearn.metrics import fbeta_score, precision_score, recall_score
+from sklearn.ensemble import RandomForestClassifier
+from pathlib import Path
+
+CAT_FEATURES = [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native-country",
+]
 
 
 def train_model(X_train, y_train):
@@ -16,7 +36,9 @@ def train_model(X_train, y_train):
     model : RandomForestClassifier
         Trained machine learning model.
     """
-    pass
+    model = RandomForestClassifier()
+    model.fit(X_train, y_train)
+    return model
 
 
 def compute_model_metrics(y, preds):
@@ -42,7 +64,7 @@ def compute_model_metrics(y, preds):
 
 
 def inference(model, X):
-    """ Run model inferences and return the predictions.
+    """Run model inferences and return the predictions.
 
     Inputs
     ------
@@ -55,4 +77,68 @@ def inference(model, X):
     preds : np.ndarray
         Predictions from the model.
     """
-    pass
+    preds = model.predict(X)
+    return preds
+
+
+def save_model(
+    model,
+    encoder,
+    lb,
+    model_path=Path(__file__).parent.parent.parent / "model" / "model.pkl",
+    encoder_path=Path(__file__).parent.parent.parent / "model" / "encoder.pkl",
+    lb_path=Path(__file__).parent.parent.parent / "model" / "lb.pkl",
+):
+    """Save the trained model, encoder, and label binarizer to disk.
+
+    Inputs
+    ------
+    model : RandomForestClassifier
+        Trained machine learning model.
+    encoder : sklearn.preprocessing._encoders.OneHotEncoder
+        Trained OneHotEncoder.
+    lb : sklearn.preprocessing._label.LabelBinarizer
+        Trained LabelBinarizer.
+    model_path : str
+        Path to save the model (default="model/model.pkl").
+    encoder_path : str
+        Path to save the encoder (default="model/encoder.pkl").
+    lb_path : str
+        Path to save the label binarizer (default="model/lb.pkl").
+    """
+
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    joblib.dump(model, model_path)
+    joblib.dump(encoder, encoder_path)
+    joblib.dump(lb, lb_path)
+
+
+def load_artifacts(
+    model_path=Path(__file__).parent.parent.parent / "model" / "model.pkl",
+    encoder_path=Path(__file__).parent.parent.parent / "model" / "encoder.pkl",
+    lb_path=Path(__file__).parent.parent.parent / "model" / "lb.pkl",
+):
+    """Load the trained model, encoder, and label binarizer from disk.
+
+    Inputs
+    ------
+    model_path : str
+        Path to load the model (default="model/model.pkl").
+    encoder_path : str
+        Path to load the encoder (default="model/encoder.pkl").
+    lb_path : str
+        Path to load the label binarizer (default="model/lb.pkl").
+    Returns
+    -------
+    model : RandomForestClassifier
+        Trained machine learning model.
+    encoder : sklearn.preprocessing._encoders.OneHotEncoder
+        Trained OneHotEncoder.
+    lb : sklearn.preprocessing._label.LabelBinarizer
+        Trained LabelBinarizer.
+    """
+
+    model = joblib.load(model_path)
+    encoder = joblib.load(encoder_path)
+    lb = joblib.load(lb_path)
+    return model, encoder, lb
