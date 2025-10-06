@@ -7,7 +7,6 @@ from fastapi import FastAPI
 from typing_extensions import Literal
 import pandas as pd
 import numpy as np
-import uvicorn
 from pydantic import BaseModel, Field, ConfigDict
 
 from starter.ml.model import inference, load_artifacts, CAT_FEATURES

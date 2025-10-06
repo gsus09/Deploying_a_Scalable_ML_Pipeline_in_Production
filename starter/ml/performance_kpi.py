@@ -81,5 +81,4 @@ def compute_model_performance_on_slices(
                 }
             )
 
-    results_df = pd.DataFrame(results)
-    return results_df
+    return results

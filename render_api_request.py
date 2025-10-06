@@ -2,29 +2,30 @@ import requests
 import logging
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
+logger = logging.getLogger(__name__)
 
 features = {
-    "age": 36,
-    "workclass": "Private",
-    "fnlgt": 302146,
-    "education": "HS-grad",
-    "education_num": 9,
-    "marital_status": "Divorced",
-    "occupation": "Craft-repair",
-    "relationship": "Husband",
+    "age": 40,
+    "workclass": "State-gov",
+    "fnlgt": 77516,
+    "education": "Bachelors",
+    "education_num": 13,
+    "marital_status": "Married-civ-spouse",
+    "occupation": "Prof-specialty",
+    "relationship": "Own-child",
     "race": "White",
     "sex": "Male",
-    "capital_gain": 2000,
+    "capital_gain": 2000000,
     "capital_loss": 0,
-    "hours_per_week": 45,
+    "hours_per_week": 40,
     "native_country": "United-States",
 }
 
-app_url = "https://render-deployment-v5l3.onrender.com/predict_income"
+app_url = "https://deploying-a-scalable-ml-pipeline-in-pcgr.onrender.com/predict_income"
 
 r = requests.post(app_url, json=features)
 assert r.status_code == 200
 
-logging.info("Testing Render app")
-logging.info(f"Status code: {r.status_code}")
-logging.info(f"Response body: {r.json()}")
+logger.info("Testing Render app")
+logger.info(f"Status code: {r.status_code}")
+logger.info(f"Response body: {r.json()}")

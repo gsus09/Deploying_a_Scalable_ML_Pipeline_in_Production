@@ -57,10 +57,14 @@ y_pred = inference(model, X_test)
 precision, recall, fbeta = compute_model_metrics(y_test, y_pred)
 logger.info(f"Precision: {precision: .2f}. Recall: {recall: .2f}. Fbeta: {fbeta: .2f}")
 
-performance_df = compute_model_performance_on_slices(
+performance_list = compute_model_performance_on_slices(
     model, test, CAT_FEATURES, "salary", encoder, lb
 )
 
-performance_path = Path(__file__).parent.parent / "model" / "slice_output.csv"
-performance_df.to_csv(performance_path, index=False)
+performance_path = Path(__file__).parent.parent / "model" / "slice_output.txt"
+with open(performance_path, "w") as f:
+    for entry in performance_list:
+        f.write(f"feature: {entry['feature']}, value: {entry['value']}, "
+                f"precision: {entry['precision']:.2f}, recall: {entry['recall']:.2f}, "
+                f"fbeta: {entry['fbeta']:.2f}, num_samples: {entry['num_samples']}\n")
 logger.info(f"Model performance on slices saved to {performance_path}.")
