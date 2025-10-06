@@ -219,8 +219,3 @@ async def predict(input: ModelInput):
     pred = lb.inverse_transform(y)[0]
 
     return {"Income prediction is:": pred}
-
-
-if __name__ == "__main__":
-    # uvicorn.run("main:app", host="0.0.0.0", port=10000, reload=True)
-    uvicorn.run("main:app", reload=True)
